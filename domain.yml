@@ -27,6 +27,7 @@ intents:
 - space
 - start
 - inicio
+- que_hora_es
 entities:
 - cesante
 - enfermo
@@ -60,7 +61,7 @@ responses:
   utter_default:
   - text: Disculpe ¿Sería tan amable de responder con un si o un no?
   utter_default_repetir:
-  - text: Disculpe, no le entendí
+  - text: Disculpe, no le entendí ¿Sería tan amable de responder con un si o un no?
   utter_disculpe_molestia:
   - text: Disculpe la molestia, que tenga un buen día, Adiós.
   utter_si_conoce:

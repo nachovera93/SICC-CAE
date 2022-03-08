@@ -444,17 +444,6 @@ stories:
     - intent: porque_no_puedo_intent
       entities:
       - no_puede: no puedo
-    - action: paga_form
-    - active_loop: paga_form
-    - slot_was_set:
-      - pagará_o_no: no
-    - slot_was_set:
-      - requested_slot: null
-    - active_loop: null
-    - action: utter_negación_pago
-    - intent: porque_no_puedo_intent
-      entities:
-      - no_puede: no puedo
     - action: razon_de_no_pago_form
     - active_loop: razon_de_no_pago_form
     - slot_was_set:
@@ -462,11 +451,21 @@ stories:
     - slot_was_set:
       - requested_slot: null
     - active_loop: null
+    - action: utter_negación_pago
+    - intent: negación
+      entities:
+      - respuesta: no 
+    - action: razon_de_no_pago_form
+    - active_loop: razon_de_no_pago_form
+    - slot_was_set:
+      - razon: no 
+    - slot_was_set:
+      - requested_slot: null
+    - active_loop: null
     - action: action_no_paga
     - action: action_recibir_es_o_no
     - action: action_recibir_paga_o_no
     - action: action_guardar_razón
-    - action: action_final
     - action: action_restart2
 
   - story: no paga porque no tiene dinero

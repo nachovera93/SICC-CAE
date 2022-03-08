@@ -188,7 +188,7 @@ class ActionHello2(Action):
         #print("uniqueid: ", tracker.sender_id)
         llamarDB(uniqueid)
         progreso(7,razon,compromiso_p,derivacion,fecha_com,"No",uniqueid)
-        dispatcher.utter_message(f'Me comunico con {primernombre}?')
+        dispatcher.utter_message(f'Disculpe, me comunico con {primernombre}?')
         return []
 
 
@@ -207,7 +207,7 @@ class ActionQuestion(Action):
         progreso(1,razon,compromiso_p,derivacion,fecha_com,"No",uniqueid)
         llamarDB(uniqueid)
         ConverterDate()
-        dispatcher.utter_message(f'{nombre}, estamos llamando de SICC por encargo de Comisión Ingresa para recordarle que tienen un saldo pendiente de su credito CAE. El monto es de {monto} y venció el {dia} de {nombreMes} del {anio} ¿Puede realizar el pago dentro de los proximos 3 días?') 
+        dispatcher.utter_message(f'{primernombre}, estamos llamando de SICC por encargo de Comisión Ingresa para recordarle que tienen un saldo pendiente de su credito CAE. El monto es de {monto} y venció el {dia} de {nombreMes} del {anio} ¿Puede realizar el pago dentro de los proximos 3 días?') 
         progreso(2,razon,compromiso_p,derivacion,fecha_com,"Si",uniqueid)
            
         return []
@@ -237,7 +237,7 @@ class ActionSiPaga(Action):
         print(f'Dia a pagar {(today_date + td).day}')
         print(f'Mes a pagar {(today_date + td).month}')
         print(f'Año a pagar {(today_date + td).year}') 
-        dispatcher.utter_message(f"Muchas gracias por su tiempo {primernombre}. Su pago ah quedado agendado para el {dia} de {nombreMes} del {anio}. Para mas información puede ingresar a www.sicc.cl | EXIT")
+        dispatcher.utter_message(f"Muchas gracias por su tiempo {primernombre}. Su pago ah quedado agendado para el {dia} de {nombreMes} del {anio}. Para mas información puede ingresar a triple doble b .sicc.cl | EXIT")
         progreso(3,razon,3,derivacion,fechaPago,"Si",uniqueid) 
         return []
 
@@ -257,7 +257,7 @@ class ActionNoPaga(Action):
         llamarDB(uniqueid)
         razon = tracker.get_slot("razon")
         progreso(4,razon,4,derivacion,fecha_com,"Si",uniqueid)
-        dispatcher.utter_message(f"Muchas gracias por su tiempo . Para más información puede ingresar a www.sicc.cl. Que tenga un lindo dia! | EXIT")#{primernombre}
+        dispatcher.utter_message(f"Muchas gracias por su tiempo {primernombre} . Para más información puede ingresar a triple doble b .sicc.cl. Que tenga un lindo dia! | EXIT")#{primernombre}
         return []
 
 
@@ -273,7 +273,7 @@ class ActionContact(Action):
         #database = DataBase()
         global uniqueid
         uniqueid = tracker.sender_id
-        dispatcher.utter_message(f'Muchas gracias, lo estará contactando uno de nuestros Ejecutivos | EXIT')
+        dispatcher.utter_message(f'Muchas gracias {primernombre}, lo estará contactando uno de nuestros Ejecutivos | EXIT')
         llamarDB(uniqueid)
         TipoContacto(uniqueid)
         if (tipo_contact=="3"):
@@ -297,8 +297,8 @@ class ActionGetGoodBye(Action):
         #database = DataBase()
         global uniqueid
         uniqueid = tracker.sender_id
-        dispatcher.utter_message(f'Muchas gracias por su tiempo, que tenga un buen día | EXIT')
         llamarDB(uniqueid)
+        dispatcher.utter_message(f'Muchas gracias por su tiempo {primernombre}, que tenga un buen día | EXIT')
         TipoContacto(uniqueid)
         if (tipo_contact=="3"):
             progreso(3,razon,3,"No",fechaPago,"Si",uniqueid)
@@ -338,7 +338,7 @@ class ActionSiConoce(Action):
         uniqueid = tracker.sender_id
         llamarDB(uniqueid)
         progreso(5,razon,compromiso_p,derivacion,fecha_com,entrega_info,uniqueid)
-        dispatcher.utter_message(f'Podría comentarle que tenemos información importante y que nos puede encontrar en www.sic.cl o llamando al 223658000. Gracias | EXIT')
+        dispatcher.utter_message(f'Podría comentarle que tenemos información importante y que nos puede encontrar en triple doble b .sic.cl o llamando al 223658000. Gracias | EXIT')
         progreso(6,razon,compromiso_p,derivacion,fecha_com,"Si",uniqueid)
         return []
 
@@ -404,7 +404,7 @@ class ActionDonde(Action):
         global uniqueid
         uniqueid = tracker.sender_id
         llamarDB(uniqueid)
-        dispatcher.utter_message(f'Nos estamos comunicando por encargo de Cevsa')
+        dispatcher.utter_message(f'Nos estamos comunicando desde Comisión Ingresa')
         return []
 
 class ActionDonde2(Action):
@@ -415,7 +415,7 @@ class ActionDonde2(Action):
         global uniqueid
         uniqueid = tracker.sender_id
         llamarDB(uniqueid)
-        dispatcher.utter_message(f'Estamos llamando por encargo de Cevsa, podrá pagar dentro de los 3 proximos días?')
+        dispatcher.utter_message(f'Estamos llamando desde Comisión Ingresa. {primernombre}, podrá pagar dentro de los 3 proximos días?')
         return []
 
 class ActionMonto(Action):
@@ -427,7 +427,7 @@ class ActionMonto(Action):
         uniqueid = tracker.sender_id
         #progreso(2,razon,compromiso_p,derivacion,fecha_com,"Si",uniqueid)
         llamarDB(uniqueid)
-        dispatcher.utter_message(f'El monto adeudado es de {monto} pesos, con oferta de {oferta}. Podrá pagar dentro de los 3 proximos días?')
+        dispatcher.utter_message(f'El monto adeudado es de {monto} pesos. {primernombre}, podrá pagar dentro de los 3 proximos días?')
         return []
 
 class FechaVencimiento(Action):
@@ -438,7 +438,7 @@ class FechaVencimiento(Action):
         global uniqueid
         uniqueid = tracker.sender_id
         llamarDB(uniqueid)
-        dispatcher.utter_message(f'La fecha sería el {dia} de {nombreMes} del {anio}, osea dentro de 3 días. Cree que podría cancelar?')
+        dispatcher.utter_message(f'La fecha sería el {dia} de {nombreMes} del {anio}, osea dentro de 3 días. {primernombre}, cree que podrá cancelar?')
         return []
 
 

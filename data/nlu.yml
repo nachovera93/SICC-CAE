@@ -40,7 +40,7 @@ nlu:
     - [si](respuesta) dime
     - [si](respuesta) con el
     - ah [bueno](respuesta)
-    - [si](respuesta), con el
+    - [si](respuesta), con ella
     - [si](respuesta) pero no esta
     - [si](respuesta) con el mismo
     - [si](respuesta) con quien
@@ -50,6 +50,13 @@ nlu:
     - [siii](respuesta)
     - [sii](respuesta)
     - la verdad es que [si](respuesta)
+    - [con el](respuesta)
+    - [con ella](respuesta)
+    - [ok](respuesta)
+    - [ti](respuesta)
+    - [tiii](respuesta)
+    - [mande](respuesta)
+    - [mandé](respuesta)
 - intent: negación
   examples: |
     - [negativo](respuesta)
@@ -171,24 +178,50 @@ nlu:
     - repiteme porfavor
     - no entendi
     - como dijo?
+    - que necesita?
 
 - intent: out_of_scope
   examples: |
     - digame
     - cuenteme
     - yo creo
-    - ok
     - ah ya
     - ya
 
-- intent: preguntar_nombre
+- intent: eres_humano
   examples: |
-    - a quien?
-    - a quien busca?
+    - eres un bot?
+    - eres bot?
+    - estoy hablando con una ia?
+    - eres un humano o un bot?
+    - eres real?
+    - eres virtual?
+    - eres una ai?
+    - no eres un bot
+    - eres un chatbot
+    - eres un bot real?
+    - eres un robot
+    - eres una inteligencia artifial
+    - eres artifical
+    - eres real
+    - eres de verdad un robot?
+    - eres de verdad un bot?
+    - estas seguro que eres un bot?
+    - bot?
+    - robot?
+    - eres un robot?
+    - con quien hablo?
+    - quien eres?
+    - quien me habla?
+    - con quien estoy hablando?
+    - con quien hablo?
+    - quien habla
     - con quien?
-    - disculpa a quien?
-    - a quien me dijo?
+    - disculpa quien habla?
+    - quien me dijo?
     - con quien
+
+    
 
 - intent: preguntar_monto
   examples: |
@@ -227,6 +260,14 @@ nlu:
   examples: |
     - soy yo
     - si soy yo
+
+- intent: que_hora_es
+  examples: |
+    - que hora es
+    - dame la hora porfavor
+    - cual es el horario
+    - hora porfavor
+    - dime hora
 
 
 - intent: inicio
