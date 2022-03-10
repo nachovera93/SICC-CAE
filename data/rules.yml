@@ -16,12 +16,13 @@ rules:
       - action: action_hello2
 
 
-  - rule: eres bot2?
+   - rule: eres bot2?
     steps:
       - action: action_ask_question
       - intent: eres_humano
       - action: utter_bot
       - action: action_ask_question2
+      - action: action_ask_question
 
   - rule: eres bot3?
     steps:
@@ -198,11 +199,6 @@ rules:
       - action: action_donde
       - action: utter_negación_pago
       
-
-  - rule: Confirm that the bot is not a human
-    steps:
-      - intent: soy_yo
-      - action: action_ask_question
    
   - rule: despedida
     steps:

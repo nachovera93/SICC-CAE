@@ -8,11 +8,10 @@ from rasa_sdk.forms import FormValidationAction
 from rasa_sdk.events import SlotSet
 from rasa_sdk.events import Restarted
 from rasa_sdk.events import AllSlotsReset
-import mysql.connector
 import pymysql
 global SiPaga
 global NoPaga
-global razon
+global motivo
 global tipo_contacto
 global compromiso_p
 global derivacion
@@ -20,12 +19,21 @@ global fecha_com
 global entrega_info
 SiPaga=None
 NoPaga=None
-razon=None
+motivo=None
 tipo_contacto=None
 compromiso_p=None
 derivacion=None
 fecha_com=None
 entrega_info=None
+
+
+import requests
+import json
+url = "http://172.16.1.72/webservice-php-json/index.php"
+
+#url = "http://45.228.211.133:8080/webservice-php-json/index.php"
+
+"""
 class DataBase:
     def __init__(self):
         self.connection=pymysql.connect(host='172.16.1.141',
@@ -60,19 +68,7 @@ class DataBase:
             print("Deuda monto:" , monto)
             print("Campaña: " , Campania)
             print("oferta: " , oferta)
-            """
-            global mes
-            global dia
-            global anio
-            global nombreMes 
-            dia=int(fechaVencimiento[0:2])
-            mes=int(fechaVencimiento[3:5])
-            anio=int(fechaVencimiento[6:10])
-            nombreMes=month_converter(mes-1)
-            print("dia: ",dia)
-            print("mes: ",nombreMes)
-            print("año: ",anio)
-            """
+          
               
         except Exception as e:
             raise
@@ -87,8 +83,8 @@ class DataBase:
           
         except Exception as e:
             raise 
-    def update_user(self,tipo_contacto,razon,compromiso_p,derivacion,fecha_com,entrega_info,uniqueid):
-        sql = "UPDATE bot_movatec SET tipo_contacto='{}',motivo='{}',compromiso_p='{}',derivacion='{}',fecha_com='{}',entrega_info='{}' WHERE lead_id='{}'".format(tipo_contacto,razon,compromiso_p,derivacion,fecha_com,entrega_info,uniqueid)
+    def update_user(self,tipo_contacto,motivo,compromiso_p,derivacion,fecha_com,entrega_info,uniqueid):
+        sql = "UPDATE bot_movatec SET tipo_contacto='{}',motivo='{}',compromiso_p='{}',derivacion='{}',fecha_com='{}',entrega_info='{}' WHERE lead_id='{}'".format(tipo_contacto,motivo,compromiso_p,derivacion,fecha_com,entrega_info,uniqueid)
        # sql = "UPDATE usuarios SET name='{}' WHERE id = {}".format(name,id)
         
         try:
@@ -106,7 +102,7 @@ class DataBase:
 
 database = DataBase()
 
-
+"""
 """
 def variables():
      global fechaVencimiento
@@ -118,6 +114,76 @@ def variables():
 
 variables()
 """ 
+
+
+
+
+def llamarDB(uniqueid):
+    #database = DataBase()
+    database.select_user(uniqueid)
+
+def progreso(tipo_contacto,motivo,compromiso_p,derivacion,fecha_com,entrega_info,uniqueid):
+    #database = DataBase()
+    database.update_user(tipo_contacto,motivo,compromiso_p,derivacion,fecha_com,entrega_info,uniqueid)
+
+def TipoContacto(uniqueid):
+    #database = DataBase()
+    database.tipo_contacto(uniqueid)
+
+
+
+def Querys(uniqueid):
+        payload={'action': 'get','id': f'{uniqueid}'}
+        files=[
+        ]
+        headers = {}
+        response = requests.request("POST", url, headers=headers, data=payload, files=files)
+        my_bytes_value = response.content
+        my_new_string = my_bytes_value.decode("utf-8").replace("'", '"')
+        data = json.loads(my_new_string)
+        s = json.dumps(data, indent=4, sort_keys=True)
+        print(s)
+        global nombre
+        global monto
+        global fechaVencimiento
+        global primernombre
+        global rut
+        global campania
+        nombre=data["data"][0]["address1"]
+        monto=data["data"][0]["address2"]
+        fechaVencimiento=data["data"][0]["city"]
+        primernombre=data["data"][0]["first_name"]
+        rut=data["data"][0]["vendor_lead_code"]
+        campania=data["data"][0]["campaign_name"]
+
+"""
+            "address1": "DANIELA HERNANDEZ",
+            "address2": "26799",
+            "campaign_name": "CLICK RECORDATORIO",
+            "city": "28-02-21",
+            "email": "",
+            "first_name": "DANIELA",
+            "lead_id": "134",
+            "list_name": "CLICK RECORDATORIO",
+            "owner": "78574270",
+            "vendor_lead_code": "170099999"
+"""
+
+def Updates(tipo_contacto,motivo,compromiso_p,derivacion,fecha_com,entrega_info,lead_id,rut):
+          payload={'action': 'update',
+          'tipo_contacto': f'{tipo_contacto}',
+          'motivo': f'{motivo}',
+          'compromiso_p': f'{compromiso_p}',
+          'derivacion': f'{derivacion}',
+          'fecha_com': f'{fecha_com}',
+          'entrega_info': f'{entrega_info}',
+          'lead_id': f'{lead_id}',
+          'rut': f'{rut}'}
+          files=[
+          ]
+          headers = {}
+          response = requests.request("POST", url, headers=headers, data=payload, files=files)
+          print(response.text)
 
 
 def month_converter(i):
@@ -133,27 +199,11 @@ def ConverterDate():
      dia=int(fechaVencimiento[0:2])
      mes=int(fechaVencimiento[3:5])
      anio=int(fechaVencimiento[6:10])
-     nombreMes=month_converter(mes-1)
+     nombreMes=month_converter(mes)
      print("dia: ",dia)
      print("mes: ",nombreMes)
      print("año: ",anio)
 
-
-#ConverterDate()
-
-
-
-def llamarDB(uniqueid):
-    #database = DataBase()
-    database.select_user(uniqueid)
-
-def progreso(tipo_contacto,razon,compromiso_p,derivacion,fecha_com,entrega_info,uniqueid):
-    #database = DataBase()
-    database.update_user(tipo_contacto,razon,compromiso_p,derivacion,fecha_com,entrega_info,uniqueid)
-
-def TipoContacto(uniqueid):
-    #database = DataBase()
-    database.tipo_contacto(uniqueid)
 
 class ActionHello(Action):
     def name(self):
@@ -163,9 +213,9 @@ class ActionHello(Action):
         #database = DataBase()
         global uniqueid
         uniqueid = tracker.sender_id
-        llamarDB(uniqueid)
-        
-        progreso(7,razon,compromiso_p,derivacion,fecha_com,"No",uniqueid)
+        #llamarDB(uniqueid)
+        Querys(uniqueid)
+        Updates(7,motivo,compromiso_p,derivacion,fecha_com,"No",uniqueid,rut)
         t = datetime.datetime.now()
         if 23 >= int(t.hour) >= 12:
              dispatcher.utter_message(f'Buenas tardes, mi nombre es Gertrudis, ¿Me comunico con {nombre}?')
@@ -186,8 +236,8 @@ class ActionHello2(Action):
         global uniqueid
         uniqueid = tracker.sender_id
         #print("uniqueid: ", tracker.sender_id)
-        llamarDB(uniqueid)
-        progreso(7,razon,compromiso_p,derivacion,fecha_com,"No",uniqueid)
+        Querys(uniqueid)
+        Updates(7,motivo,compromiso_p,derivacion,fecha_com,"No",uniqueid,rut)
         dispatcher.utter_message(f'Disculpe, me comunico con {primernombre}?')
         return []
 
@@ -204,11 +254,11 @@ class ActionQuestion(Action):
         #database = DataBase()
         global uniqueid
         uniqueid = tracker.sender_id
-        progreso(1,razon,compromiso_p,derivacion,fecha_com,"No",uniqueid)
-        llamarDB(uniqueid)
+        Querys(uniqueid)
+        Updates(1,motivo,compromiso_p,derivacion,fecha_com,"No",uniqueid,rut)
         ConverterDate()
         dispatcher.utter_message(f'{primernombre}, estamos llamando de SICC por encargo de Comisión Ingresa para recordarle que tienen un saldo pendiente de su credito CAE. El monto es de {monto} y venció el {dia} de {nombreMes} del {anio} ¿Puede realizar el pago dentro de los proximos 3 días?') 
-        progreso(2,razon,compromiso_p,derivacion,fecha_com,"Si",uniqueid)
+        Updates(2,motivo,compromiso_p,derivacion,fecha_com,"Si",uniqueid,rut)
            
         return []
        
@@ -238,7 +288,7 @@ class ActionSiPaga(Action):
         print(f'Mes a pagar {(today_date + td).month}')
         print(f'Año a pagar {(today_date + td).year}') 
         dispatcher.utter_message(f"Muchas gracias por su tiempo {primernombre}. Su pago ah quedado agendado para el {dia} de {nombreMes} del {anio}. Para mas información puede ingresar a triple doble b .sicc.cl | EXIT")
-        progreso(3,razon,3,derivacion,fechaPago,"Si",uniqueid) 
+        progreso(3,motivo,3,derivacion,fechaPago,"Si",uniqueid,rut) 
         return []
 
 
@@ -254,9 +304,9 @@ class ActionNoPaga(Action):
         #database = DataBase()
         global uniqueid
         uniqueid = tracker.sender_id
-        llamarDB(uniqueid)
-        razon = tracker.get_slot("razon")
-        progreso(4,razon,4,derivacion,fecha_com,"Si",uniqueid)
+        Querys(uniqueid)
+        motivo = tracker.get_slot("razon")
+        Updates(4,motivo,4,derivacion,fecha_com,"Si",uniqueid,rut)
         dispatcher.utter_message(f"Muchas gracias por su tiempo {primernombre} . Para más información puede ingresar a triple doble b .sicc.cl. Que tenga un lindo dia! | EXIT")#{primernombre}
         return []
 
@@ -273,15 +323,15 @@ class ActionContact(Action):
         #database = DataBase()
         global uniqueid
         uniqueid = tracker.sender_id
-        dispatcher.utter_message(f'Muchas gracias {primernombre}, lo estará contactando uno de nuestros Ejecutivos | EXIT')
-        llamarDB(uniqueid)
+        Querys(uniqueid)
         TipoContacto(uniqueid)
-        if (tipo_contact=="3"):
-            progreso(3,razon,3,"Si",fechaPago,"Si",uniqueid)
-        elif(tipo_contact=="4"):
-            progreso(4,razon,None,"Si",fecha_com,"Si",uniqueid)
-        else:
-            print("Nada")
+        #if (tipo_contact=="3"):
+        dispatcher.utter_message(f'Muchas gracias {primernombre}, lo estará contactando uno de nuestros Ejecutivos | EXIT')
+        Updates(3,motivo,3,"Si",fechaPago,"Si",uniqueid,rut)
+        #elif(tipo_contact=="4"):
+        #    progreso(4,motivo,None,"Si",fecha_com,"Si",uniqueid)
+        #else:
+        #    print("Nada")
         return []
 
 
@@ -297,15 +347,15 @@ class ActionGetGoodBye(Action):
         #database = DataBase()
         global uniqueid
         uniqueid = tracker.sender_id
-        llamarDB(uniqueid)
+        Querys(uniqueid)
         dispatcher.utter_message(f'Muchas gracias por su tiempo {primernombre}, que tenga un buen día | EXIT')
-        TipoContacto(uniqueid)
-        if (tipo_contact=="3"):
-            progreso(3,razon,3,"No",fechaPago,"Si",uniqueid)
-        elif (tipo_contact=="4"):
-            progreso(4,razon,4,"No",fecha_com,"Si",uniqueid)
-        else:
-            print("Nada")
+        #TipoContacto(uniqueid)
+        #if (tipo_contact=="3"):
+        Updates(3,motivo,3,"No",fechaPago,"Si",uniqueid,rut)
+        #elif (tipo_contact=="4"):
+        #    progreso(4,motivo,4,"No",fecha_com,"Si",uniqueid)
+        #else:
+        #    print("Nada")
         return []
 
 
@@ -323,7 +373,7 @@ class ActionConoce0(Action):
         #database = DataBase()
         global uniqueid
         uniqueid = tracker.sender_id
-        llamarDB(uniqueid)
+        Querys(uniqueid)
         dispatcher.utter_message(f'Disculpe, usted conoce a {nombre}?')
         return []
 
@@ -336,10 +386,10 @@ class ActionSiConoce(Action):
         #database = DataBase()
         global uniqueid
         uniqueid = tracker.sender_id
-        llamarDB(uniqueid)
-        progreso(5,razon,compromiso_p,derivacion,fecha_com,entrega_info,uniqueid)
+        Querys(uniqueid)
+        Updates(5,motivo,compromiso_p,derivacion,fecha_com,entrega_info,uniqueid,rut)
         dispatcher.utter_message(f'Podría comentarle que tenemos información importante y que nos puede encontrar en triple doble b .sic.cl o llamando al 223658000. Gracias | EXIT')
-        progreso(6,razon,compromiso_p,derivacion,fecha_com,"Si",uniqueid)
+        Updates(6,motivo,compromiso_p,derivacion,fecha_com,"Si",uniqueid,rut)
         return []
 
 
@@ -389,11 +439,11 @@ class ActionConoce(Action):
         return "action_quien"
 
     def run(self, dispatcher, tracker, domain):
-        database = DataBase()
+        #database = DataBase()
         global uniqueid
         uniqueid = tracker.sender_id
-        llamarDB(uniqueid)
-        dispatcher.utter_message(f'{nombre}?')
+        Querys(uniqueid)
+        dispatcher.utter_message(f'Me comunico con {nombre}?')
         return []
 
 class ActionDonde(Action):
@@ -403,7 +453,7 @@ class ActionDonde(Action):
     def run(self, dispatcher, tracker, domain):
         global uniqueid
         uniqueid = tracker.sender_id
-        llamarDB(uniqueid)
+        Querys(uniqueid)
         dispatcher.utter_message(f'Nos estamos comunicando desde Comisión Ingresa')
         return []
 
@@ -414,7 +464,7 @@ class ActionDonde2(Action):
     def run(self, dispatcher, tracker, domain):
         global uniqueid
         uniqueid = tracker.sender_id
-        llamarDB(uniqueid)
+        Querys(uniqueid)
         dispatcher.utter_message(f'Estamos llamando desde Comisión Ingresa. {primernombre}, podrá pagar dentro de los 3 proximos días?')
         return []
 
@@ -425,8 +475,8 @@ class ActionMonto(Action):
     def run(self, dispatcher, tracker, domain):
         global uniqueid
         uniqueid = tracker.sender_id
-        #progreso(2,razon,compromiso_p,derivacion,fecha_com,"Si",uniqueid)
-        llamarDB(uniqueid)
+        #progreso(2,motivo,compromiso_p,derivacion,fecha_com,"Si",uniqueid)
+        Querys(uniqueid)
         dispatcher.utter_message(f'El monto adeudado es de {monto} pesos. {primernombre}, podrá pagar dentro de los 3 proximos días?')
         return []
 
@@ -437,7 +487,7 @@ class FechaVencimiento(Action):
     def run(self, dispatcher, tracker, domain):
         global uniqueid
         uniqueid = tracker.sender_id
-        llamarDB(uniqueid)
+        Querys(uniqueid)
         dispatcher.utter_message(f'La fecha sería el {dia} de {nombreMes} del {anio}, osea dentro de 3 días. {primernombre}, cree que podrá cancelar?')
         return []
 
@@ -502,8 +552,8 @@ class ActionRecibirAutorizaoNo(Action):
     def run(self, dispatcher: CollectingDispatcher,
             tracker: Tracker,
             domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
-        razon = tracker.get_slot("razon")
-        print("razon: ", razon)
+        motivo = tracker.get_slot("razon")
+        print("motivo: ", motivo)
             #dispatcher.utter_message(text=f"Razón: {Razón}")
         return []
 

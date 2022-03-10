@@ -57,6 +57,14 @@ nlu:
     - [tiii](respuesta)
     - [mande](respuesta)
     - [mandé](respuesta)
+    - [digame](respuesta)
+    - [diga](respuesta)
+    - [soy yo](respuesta)
+    - [y](respuesta)
+    - [i](respuesta)
+    - [yy](respuesta) 
+    - si [soy yo](respuesta)
+    - [cuenteme](respuesta)
 - intent: negación
   examples: |
     - [negativo](respuesta)
@@ -182,8 +190,6 @@ nlu:
 
 - intent: out_of_scope
   examples: |
-    - digame
-    - cuenteme
     - yo creo
     - ah ya
     - ya
@@ -255,11 +261,6 @@ nlu:
     - de que parte?
     - de que parte llama?
     - de que parte es esto?
-
-- intent: soy_yo
-  examples: |
-    - soy yo
-    - si soy yo
 
 - intent: que_hora_es
   examples: |
