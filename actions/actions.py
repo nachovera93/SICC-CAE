@@ -29,9 +29,9 @@ entrega_info=None
 
 import requests
 import json
-url = "http://172.16.1.72/webservice-php-json/index.php"
+#url = "http://172.16.1.72/webservice-php-json/index.php"
 
-#url = "http://45.228.211.133:8080/webservice-php-json/index.php"
+url = "http://45.228.211.133:8080/webservice-php-json/index.php"
 
 """
 class DataBase:
