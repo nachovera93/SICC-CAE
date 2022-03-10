@@ -16,7 +16,7 @@ rules:
       - action: action_hello2
 
 
-   - rule: eres bot2?
+  - rule: eres bot2?
     steps:
       - action: action_ask_question
       - intent: eres_humano
@@ -199,6 +199,11 @@ rules:
       - action: action_donde
       - action: utter_negación_pago
       
+      
+  - rule: donde 3
+    steps:
+      - intent: de_donde
+      - action: action_donde
    
   - rule: despedida
     steps:
