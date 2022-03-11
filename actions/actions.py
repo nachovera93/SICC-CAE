@@ -20,8 +20,8 @@ global entrega_info
 SiPaga=None
 NoPaga=None
 motivo=None
-tipo_contacto=None
-compromiso_p=None
+tipo_contacto=0
+compromiso_p=0
 derivacion=None
 fecha_com=None
 entrega_info=None
