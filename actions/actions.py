@@ -29,9 +29,9 @@ entrega_info=None
 
 import requests
 import json
-url = "http://172.16.1.72/webservice-php-json/index.php"
+#url = "http://172.16.1.72/webservice-php-json/index.php"
 
-#url = "http://45.228.211.133:8080/webservice-php-json/index.php"
+url = "http://45.228.211.133:8080/webservice-php-json/index.php"
 
 """
 class DataBase:
@@ -274,7 +274,7 @@ class ActionSiPaga(Action):
         #database = DataBase()
         global uniqueid
         uniqueid = tracker.sender_id
-        llamarDB(uniqueid)
+        Querys(uniqueid)
         today_date = date.today()
         td = timedelta(3)
         global fechaPago
@@ -288,7 +288,7 @@ class ActionSiPaga(Action):
         print(f'Mes a pagar {(today_date + td).month}')
         print(f'Año a pagar {(today_date + td).year}') 
         dispatcher.utter_message(f"Muchas gracias por su tiempo {primernombre}. Su pago ah quedado agendado para el {dia} de {nombreMes} del {anio}. Para mas información puede ingresar a triple doble b .sicc.cl | EXIT")
-        progreso(3,motivo,3,derivacion,fechaPago,"Si",uniqueid,rut) 
+        Updates(3,motivo,3,derivacion,fechaPago,"Si",uniqueid,rut) 
         return []
 
 
@@ -454,7 +454,7 @@ class ActionDonde(Action):
         global uniqueid
         uniqueid = tracker.sender_id
         Querys(uniqueid)
-        dispatcher.utter_message(f'Nos estamos comunicando desde Comisión Ingresa')
+        dispatcher.utter_message(f'Nos estamos comunicando desde Comisión Ingresa, {primernombre} podrá pagar dentro de los 3 proximos días')
         return []
 
 class ActionDonde2(Action):
