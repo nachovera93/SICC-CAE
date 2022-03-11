@@ -454,7 +454,7 @@ class ActionDonde(Action):
         global uniqueid
         uniqueid = tracker.sender_id
         Querys(uniqueid)
-        dispatcher.utter_message(f'Nos estamos comunicando desde Comisión Ingresa, {primernombre} podrá pagar dentro de los 3 proximos días')
+        dispatcher.utter_message(f'Nos estamos comunicando desde Comisión Ingresa')# {primernombre} podrá pagar dentro de los 3 proximos días')
         return []
 
 class ActionDonde2(Action):
@@ -465,7 +465,7 @@ class ActionDonde2(Action):
         global uniqueid
         uniqueid = tracker.sender_id
         Querys(uniqueid)
-        dispatcher.utter_message(f'Estamos llamando desde Comisión Ingresa.')# {primernombre}, podrá pagar dentro de los 3 proximos días?')
+        dispatcher.utter_message(f'Estamos llamando desde Comisión Ingresa. {primernombre}, podrá pagar dentro de los 3 proximos días?')
         return []
 
 class ActionMonto(Action):
